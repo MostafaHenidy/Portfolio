@@ -16,12 +16,11 @@ COPY --chown=www-data:www-data . /var/www
 RUN chmod -R 755 /var/www
 RUN composer install --no-dev --optimize-autoloader
 
-COPY .env.example .env
-RUN php artisan key:generate
+# No php artisan commands at build time here!
 
 EXPOSE 8000
 
-# Start Laravel, clear caches, and run migrations at container startup
+# At runtime: clear caches, migrate, then serve
 CMD php artisan config:clear && \
     php artisan cache:clear && \
     php artisan config:cache && \

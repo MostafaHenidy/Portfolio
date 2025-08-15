@@ -21,3 +21,12 @@ RUN php artisan key:generate
 
 EXPOSE 8000
 CMD php artisan serve --host=0.0.0.0 --port=8000
+
+# Clear and rebuild Laravel caches, then run migrations
+RUN php artisan config:clear \
+    && php artisan cache:clear \
+    && php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache
+
+RUN php artisan migrate --force
